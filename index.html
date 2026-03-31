@@ -4,36 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>GLB</title>
-   <style>
-    /* 🚨 「無」を最小化し、「門」を最大化する微調整 🚨 */
-    html, body {
-        margin: 0; padding: 0;
-        width: 100%; height: 100%;
-        background: #000; overflow: hidden;
-        display: flex; align-items: center; justify-content: center;
-    }
+    <style>
+        /* 🚨 物理的な揺れを一切許さない固定設定 🚨 */
+        html, body {
+            margin: 0; padding: 0;
+            width: 100%; height: 100dvh; /* 動的ビューポートでツールバー干渉を回避 */
+            background: #000; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            position: fixed; /* スクロールを物理的に禁止 */
+        }
 
-    #gate-video {
-        width: 100vw;  /* 横幅は画面いっぱいに */
-        height: 100vh; /* 縦幅も画面いっぱいに */
-        /* 🚨 object-fit を contain から cover へ 🚨 */
-        object-fit: cover; /* 🚨 比率を守りつつ、画面を埋め尽くす（トリミング許容） 🚨 */
-        object-position: center; /* 中央を死守 */
-        z-index: 500;
-    }
+        /* 🚨 自動調整の核心 🚨 */
+        #gate-video {
+            width: 100%; height: 100%;
+            max-width: 100vw; max-height: 100dvh;
+            /* 🚨 比率を維持し、画面内に必ず収める（無を許容） 🚨 */
+            object-fit: contain; 
+            z-index: 500;
+        }
 
-    /* アプリUI：セーフエリアを考慮し、かつ中央に固定 */
-    #main-ui {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        z-index: 600; opacity: 0; pointer-events: none;
-        display: flex; flex-direction: column; align-items: center; justify-content: space-around;
-        padding: 60px 0; box-sizing: border-box;
-    }
-    #main-ui.active { opacity: 1; pointer-events: auto; background: #000; }
-</style>
+        /* アプリUI：動画が終わった後に浮かび上がる */
+        #main-ui {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100dvh;
+            z-index: 600; opacity: 0; pointer-events: none;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-around;
+            padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
+            box-sizing: border-box; background: #000;
+        }
+        #main-ui.active { opacity: 1; pointer-events: auto; }
 
+        .breaker-btn { width: 100px; height: 100px; background: url('icon_s.png') no-repeat center center; background-size: contain; flex-shrink: 0; }
+        .lang-select { background: #000; border: 1px solid #D4AF37; color: #D4AF37; padding: 10px; border-radius: 5px; width: 110px; text-align: center; font-size: 16px; }
+    </style>
 </head>
 
 <body onclick="terminateGate()">
@@ -43,9 +46,9 @@
     </video>
 
     <div id="main-ui">
-        <div style="width: 100%; max-width: 340px; font-size: 13px; line-height: 1.6; text-align: left; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">
+        <div style="width: 100%; max-width: 320px; font-size: 13px; color: #fff; line-height: 1.6; text-align: left; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
             <b>[NB_001_PROTO]</b><br>
-            Google API 2026/4/1 制限対応。15万語の核知能。2.99ドルの実弾で、高精度翻訳を解放します。
+            Google API 2026/4/1 制限対応。15万語の核知能。2.99ドルの実弾で、高精度翻訳を解放。
         </div>
 
         <div style="display:flex; gap:10px;">
@@ -54,8 +57,7 @@
         </div>
 
         <div class="breaker-btn" onclick="goToStripe(event)"></div>
-        
-        <div style="font-size:9px; opacity:0.3; letter-spacing:3px;">VOIDBONE // GLOBAL_LANGUAGE_BREAKER</div>
+        <div style="font-size:9px; opacity:0.3; letter-spacing:3px;">VOIDBONE // GLB</div>
     </div>
 
     <script>
