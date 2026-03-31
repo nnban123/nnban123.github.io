@@ -1,62 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GLB | Global Language Breaker</title>
+    <title>GLB - Global Language Breaker</title>
     <style>
-        body { margin: 0; background: #000; color: #fff; font-family: 'Helvetica', sans-serif; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        body { margin: 0; padding: 0; background: #000; overflow: hidden; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #fff; }
+        #gate-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; width: auto; height: auto; z-style: -100; display: none; }
+        #poster-image { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-style: 100; cursor: pointer; }
+        #skip-btn { position: fixed; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.5); color: rgba(212,175,55,0.7); border-radius: 50%; display: none; justify-content: center; align-items: center; z-style: 1000; cursor: pointer; font-size: 10px; backdrop-filter: blur(5px); }
         
-        /* Onboarding Layer */
-        #gate-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity 1.5s; }
-        video { width: 100%; height: auto; outline: none; }
-
-        /* Main UI Layer */
-        #main-ui { display: none; text-align: center; opacity: 0; transition: opacity 1s; }
-        .glb-btn { width: 200px; height: 200px; background: url('icon.png') no-repeat center/contain; border: none; border-radius: 50%; cursor: pointer; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5)); transition: transform 0.1s, filter 0.3s; }
-        .glb-btn:active { transform: scale(0.95); filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.8)); }
-        
-        .status { margin-top: 30px; font-size: 0.9rem; letter-spacing: 0.5em; color: #ffd700; text-transform: uppercase; }
-        .brand { margin-top: 10px; font-size: 0.6rem; letter-spacing: 0.2em; color: #444; }
+        #main-ui { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-style: -10; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .breaker-btn { width: 150px; height: 150px; background: url('icon.png') no-repeat center center; background-size: contain; filter: drop-shadow(0 0 10px rgba(212,175,55,0.5)); cursor: pointer; transition: transform 0.1s, filter 0.3s; }
+        .breaker-btn:active { transform: scale(0.95); filter: drop-shadow(0 0 20px rgba(212,175,55,1)); }
+        .status { margin-top: 20px; color: rgba(212,175,55,0.8); font-size: 14px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-<div id="gate-overlay" onclick="ignition()">
-    <video id="gate-video" playsinline muted poster="icon.png">
+    <img src="poster.png" id="poster-image" onclick="openGate()">
+    <video id="gate-video" preload="auto">
         <source src="door.mp4" type="video/mp4">
     </video>
-</div>
+    <div id="skip-btn" onclick="breaker()">SKIP</div>
 
-<div id="main-ui">
-    <button class="glb-btn" onclick="breaker()"></button>
-    <div class="status">READY</div>
-    <div class="brand">GLOBAL LANGUAGE BREAKER</div>
-</div>
+    <div id="main-ui">
+        <div class="breaker-btn" onclick="breaker()"></div>
+        <div class="status">READY</div>
+    </div>
 
-<script>
-    const gate = document.getElementById('gate-overlay');
-    const video = document.getElementById('gate-video');
-    const ui = document.getElementById('main-ui');
+    <script>
+        const video = document.getElementById('gate-video');
+        const poster = document.getElementById('poster-image');
+        const skipBtn = document.getElementById('skip-btn');
+        const mainUI = document.getElementById('main-ui');
 
-    function ignition() {
-        video.play();
-        gate.onclick = null; // Prevent double trigger
-        
-        video.onended = () => {
-            gate.style.opacity = '0';
-            setTimeout(() => {
-                gate.style.display = 'none';
-                ui.style.display = 'block';
-                setTimeout(() => { ui.style.opacity = '1'; }, 50);
-            }, 1500);
-        };
+        function openGate() {
+            poster.style.display = 'none';
+            video.style.display = 'block';
+            skipBtn.style.display = 'flex';
+            video.play();
+            video.addEventListener('ended', breaker);
+        }
+
+        // 🚨 VOIDBONE CORE LOGIC: BREAKER (STRIPE & FREE-MODE BLOCKADE)
+        async function breaker() {
+            // [1] HAPTIC & VISUAL
+            if (navigator.vibrate) navigator.vibrate(50);
+            video.pause();
+            mainUI.style.zStyle = '100'; // Make UI visible
+
+            // [2] SENSORY DECODE (Simulated for Web)
+            console.log("GLB_SECURITY: DECODING_USER_STATE...");
+
+            // [3] CHECK SUBSCRIPTION (If not paid, enforce FREE MODE)
+            // 🚨 [BLOCKADE]: THIS URL MUST BE YOUR STRIPE CHECKOUT 🚨
+            const stripeURL = "https://buy.stripe.com/bJedRbefH5yogzZfuDasg09";
+            
+            // Logic: Is user subscribed? (Need backend confirmation, simulate FALSE for now)
+            let isSubscribed = false; 
+
+            if (!isSubscribed) {
+                // [4] ENFORCE FREE MODE: OS NATIVE & CACHE ONLY
+                alert("GLB: FREE MODE ACTIVE.\nAPI ACCESS LIMITED.");
+                const rawInput = prompt("ENTER TEXT (FREE MODE - No Gemini)");
+                
+                // standard translator (free)
+                // Need Native Implementation for Mobile standard translation
+                // Local Cache Only. No external API.
+                
+                // If the prompt needs payment to get result...
+                alert("SMILE FRIEND (150K DICT) REQUIRED.\nREDIRECTING TO SANCTUM.");
+                window.location.href = stripeURL; // FORCE STRIPE REDIRECT
+                return;
+            }
+
+            // [5] PAID MODE (MISSION: VOID): ACTIVATE SMILE FRIEND
+            alert("SMILE FRIEND CONNECTED. VOID MODE.");
+            // Actual call to NE Gateway (Private Server) with 150K dict & Batching
+        }
     }
-
-    function breaker() {
-        // Breaking logic will be injected here.
-        console.log("GLB: ACTIVE");
-    }
-</script>
+    </script>
 </body>
 </html>
