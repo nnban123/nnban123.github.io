@@ -6,82 +6,78 @@
     <title>NEXTBASE GLB</title>
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
-        /* Scene 1: Video */
-        #video-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 100; }
-        /* Scene 2 & 3: UI */
-        #main-ui { display: none; flex-direction: column; align-items:center; justify-content: space-between; height: 100vh; padding: 40px 20px; box-sizing: border-box; text-align: center; opacity: 0; transition: 2s; }
-        .logo-btn { width: 180px; height: 180px; background: url('icon.png') no-repeat center; background-size: contain; cursor: pointer; filter: drop-shadow(0 0 15px rgba(255,204,0,0.5)); margin-top: 50px; }
-        .status-ready { color: #ffcc00; letter-spacing: 8px; font-size: 1.2rem; margin-top: 20px; font-weight: 900; }
+        #video-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 100; cursor: pointer; }
         
-        /* Dashboard Container */
-        #settings-panel { display: none; width: 100%; max-width: 500px; background: rgba(10,10,10,0.95); border: 1px solid #222; padding: 30px; box-sizing: border-box; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 50; }
-        .btn-group { display: flex; flex-direction: column; gap: 15px; width: 100%; }
-        .action-btn { background: #ffcc00; color: #000; padding: 20px; font-weight: 900; border: none; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; }
-        .buy-btn { background: #fff; color: #000; font-size: 1.2rem; }
+        /* Scene: Central Hub */
+        #main-ui { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; opacity: 0; transition: 1.5s; z-index: 10; }
+        .logo-trigger { width: 220px; height: 220px; background: url('icon.png') no-repeat center; background-size: contain; cursor: pointer; filter: drop-shadow(0 0 20px rgba(255,204,0,0.4)); transition: 0.3s; }
+        .logo-trigger:active { transform: scale(0.95); }
+        .ready-text { color: #ffcc00; letter-spacing: 10px; font-size: 1.2rem; margin-top: 25px; font-weight: 900; }
+        .sub-text { color: #333; letter-spacing: 5px; font-size: 0.6rem; margin-top: 10px; }
+
+        /* Full Screen Settings (Overlay) */
+        #settings-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 200; padding: 40px 20px; box-sizing: border-box; flex-direction: column; align-items: center; justify-content: center; }
+        .menu-container { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; }
+        .menu-btn { background: #ffcc00; color: #000; padding: 20px; font-weight: 900; border: none; letter-spacing: 3px; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
+        .buy-btn { background: #fff; border: 2px solid #ffcc00; }
         
-        /* Policy Links (The 4 Shields) */
-        .footer-nav { display: flex; flex-direction: column; gap: 10px; font-size: 0.7rem; letter-spacing: 2px; margin-top: 30px; }
-        .footer-nav a { color: #555; text-decoration: none; text-transform: uppercase; }
-        .desc { color: #888; font-size: 0.8rem; line-height: 1.6; margin: 20px 0; }
-        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; color: #ffcc00; cursor: pointer; }
+        .policy-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 40px; }
+        .policy-links a { color: #666; text-decoration: none; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; }
+        .close-trigger { margin-top: 30px; color: #ffcc00; cursor: pointer; letter-spacing: 5px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-    <video id="video-gate" autoplay muted playsinline>
+    <video id="video-gate" autoplay muted playsinline onclick="openGate()">
         <source src="door.mp4" type="video/mp4">
     </video>
 
     <div id="main-ui">
-        <div style="width: 100%; text-align: right;">
-            <span onclick="toggleSettings()" style="cursor:pointer; color:#444; letter-spacing:2px; font-size:0.8rem;">[ SETTINGS ]</span>
-        </div>
-        
-        <div style="display:flex; flex-direction:column; align-items:center;">
-            <div class="logo-btn" onclick="goToEngine()"></div>
-            <div class="status-ready">READY</div>
-            <div style="color:#222; font-size:0.6rem; letter-spacing:5px; margin-top:10px;">GLOBAL LANGUAGE BREAKER</div>
-        </div>
-
-        <div style="color:#111; letter-spacing:10px; font-size:0.7rem;">SMILE / FRIEND</div>
+        <div class="logo-trigger" onclick="showMenu()"></div>
+        <div class="ready-text">READY</div>
+        <div class="sub-text">GLOBAL LANGUAGE BREAKER</div>
+        <div style="position:absolute; bottom:40px; color:#111; letter-spacing:10px; font-size:0.6rem;">SMILE / FRIEND</div>
     </div>
 
-    <div id="settings-panel">
-        <span class="close-btn" onclick="toggleSettings()">×</span>
-        <div class="btn-group">
-            <div class="desc">Global Language Breaker. Standard terminal engine integration. Optimized by NEXTBASE.</div>
-            <button class="action-btn" onclick="alert('Language: Global/Auto')">LANGUAGE: AUTO</button>
-            <button class="action-btn" onclick="goToEngine()">OPEN ENGINE</button>
-            <button class="action-btn buy-btn" onclick="alert('Proceed to Checkout: $2.99')">BUY ACCESS ($2.99)</button>
+    <div id="settings-overlay">
+        <div class="menu-container">
+            <div style="color:#ffcc00; font-size:0.7rem; letter-spacing:5px; margin-bottom:20px; text-align:center;">DASHBOARD</div>
+            <button class="menu-btn" onclick="alert('Language: Auto-Detect')">LANGUAGE SETTING</button>
+            <button class="menu-btn" onclick="location.href='https://nextbase-one-ha.github.io/noir/'">OPEN BREAKER</button>
+            <button class="menu-btn buy-btn" onclick="alert('Checkout $2.99')">ACTIVATE FULL ACCESS ($2.99)</button>
             
-            <div class="footer-nav">
-                <a href="legal.html">Legal Notice</a>
-                <a href="terms.html">Terms of Service</a>
-                <a href="privacy.html">Privacy Policy</a>
+            <div style="color:#555; font-size:0.7rem; line-height:1.6; text-align:center; margin-top:20px;">
+                On-device engine. Minimal connection.<br>Verified by NEXTBASE.
+            </div>
+
+            <div class="policy-links">
+                <a href="legal.html">Legal</a>
+                <a href="terms.html">Terms</a>
+                <a href="privacy.html">Privacy</a>
                 <a href="support.html">Support</a>
             </div>
+            <div class="close-trigger" onclick="hideMenu()">[ CLOSE ]</div>
         </div>
     </div>
 
     <script>
         const video = document.getElementById('video-gate');
         const ui = document.getElementById('main-ui');
-        const settings = document.getElementById('settings-panel');
+        const overlay = document.getElementById('settings-overlay');
 
-        video.onended = function() {
-            video.style.display = 'none';
-            ui.style.display = 'flex';
-            setTimeout(() => { ui.style.opacity = '1'; }, 100);
-        };
-
-        function toggleSettings() {
-            settings.style.display = (settings.style.display === 'block') ? 'none' : 'block';
+        function openGate() {
+            video.style.opacity = '0';
+            setTimeout(() => {
+                video.style.display = 'none';
+                ui.style.display = 'flex';
+                setTimeout(() => { ui.style.opacity = '1'; }, 50);
+            }, 500);
         }
 
-        function goToEngine() {
-            // 司令、ここから別リポジトリ(glb-noir)等の翻訳エンジンへ飛ばす
-            window.location.href = "https://nnban123.github.io/glb-noir/";
-        }
+        video.onended = openGate;
+
+        function showMenu() { overlay.style.display = 'flex'; }
+        function hideMenu() { overlay.style.display = 'none'; }
     </script>
 </body>
 </html>
