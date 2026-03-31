@@ -5,28 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GLB</title>
     <style>
-        body { margin: 0; padding: 0; background: #000; overflow: hidden; font-family: sans-serif; }
-        /* 動画レイヤー */
-        #gate-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 100; background: #000; }
-        /* スキップボタン */
-        #skip-btn { position: fixed; top: 20px; right: 20px; z-index: 200; padding: 12px 24px; border: 1px solid #D4AF37; color: #D4AF37; display: none; cursor: pointer; background: rgba(0,0,0,0.5); border-radius: 5px; }
-        /* メインUI（最初は透明・クリック不可） */
-        #main-ui { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
-        #main-ui.active { z-index: 300; pointer-events: auto; opacity: 1; }
-        .breaker-btn { width: 160px; height: 160px; background: url('icon.png') no-repeat center center; background-size: contain; cursor: pointer; }
-        .status { margin-top: 20px; color: #D4AF37; letter-spacing: 5px; font-size: 12px; }
+        /* 背景は常に漆黒 */
+        body { margin: 0; padding: 0; background: #000; overflow: hidden; font-family: -apple-system, sans-serif; color: #D4AF37; }
+        
+        /* 動画：最初は非表示。タップで出現 */
+        #gate-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 500; display: none; }
+        
+        #skip-btn { position: fixed; top: 20px; right: 20px; z-index: 600; padding: 10px 20px; border: 1px solid #D4AF37; color: #D4AF37; cursor: pointer; background: rgba(0,0,0,0.5); display: none; border-radius: 5px; font-size: 12px; }
+
+        /* アプリUI：動画が終わるまで z-index で隠す */
+        #main-ui { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; opacity: 0; pointer-events: none; display: flex; flex-direction: column; align-items: center; justify-content: space-around; padding: 40px 0; box-sizing: border-box; }
+        #main-ui.active { opacity: 1; pointer-events: auto; }
+
+        /* 小さい紋章 (STRIPE TRIGGER) */
+        .breaker-btn { width: 110px; height: 110px; background: url('icon_s.png') no-repeat center center; background-size: contain; cursor: pointer; }
+        
+        /* 言語設定・説明 */
+        .lang-setup { display: flex; gap: 15px; align-items: center; }
+        .lang-select { background: #000; border: 1px solid #D4AF37; color: #D4AF37; padding: 8px; border-radius: 4px; font-size: 16px; min-width: 110px; }
+        #info-text { width: 85%; max-width: 340px; font-size: 13px; color: #fff; line-height: 1.6; text-align: left; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
     </style>
 </head>
-<body onclick="startSequence()">
+<body onclick="ignition()">
 
-    <video id="gate-video" playsinline muted poster="icon.png">
+    <video id="gate-video" playsinline muted>
         <source src="door.mp4" type="video/mp4">
     </video>
     <div id="skip-btn" onclick="terminateGate(event)">SKIP</div>
 
     <div id="main-ui">
+        <div id="info-text">
+            <b>[NB_001_PROTO: SMILE FRIEND]</b><br>
+            Google API ティア制（2026/4/1適用）を突破する、15万語の核知能。2.99ドルの実弾で、高精度な翻訳と 0円 API ロジックを連結します。
+        </div>
+
+        <div class="lang-setup">
+            <select class="lang-select"><option>日本語</option><option>English</option></select>
+            <span style="font-size:12px; opacity:0.5;">→</span>
+            <select class="lang-select"><option>English</option><option>日本語</option></select>
+        </div>
+
         <div class="breaker-btn" onclick="goToStripe()"></div>
-        <div class="status">READY</div>
+        
+        <div style="font-size:10px; opacity:0.3; letter-spacing:4px;">VOIDBONE // GLOBAL_LANGUAGE_BREAKER</div>
     </div>
 
     <script>
@@ -34,11 +55,12 @@
         const skipBtn = document.getElementById('skip-btn');
         const mainUI = document.getElementById('main-ui');
 
-        function startSequence() {
-            if (video.paused) {
+        function ignition() {
+            if (video.style.display !== 'block') {
+                video.style.display = 'block';
                 video.play().then(() => {
                     skipBtn.style.display = 'block';
-                }).catch(err => terminateGate());
+                }).catch(() => terminateGate());
             }
         }
 
