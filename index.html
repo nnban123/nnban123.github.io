@@ -2,20 +2,37 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>GLB</title>
     <style>
-        body { margin: 0; padding: 0; background: #000; overflow: hidden; font-family: -apple-system, sans-serif; color: #D4AF37; }
-        
-        /* 🚨 自動再生ビデオ 🚨 */
-        #gate-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 500; }
-        
-        #main-ui { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; opacity: 0; pointer-events: none; display: flex; flex-direction: column; align-items: center; justify-content: space-around; padding: 40px 0; box-sizing: border-box; }
-        #main-ui.active { opacity: 1; pointer-events: auto; z-index: 600; background: #000; }
+        /* 🚨 全画面・スクロール禁止 🚨 */
+        * { box-sizing: border-box; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: #000; overflow: hidden; position: fixed;
+        }
 
-        .breaker-btn { width: 120px; height: 120px; background: url('icon_s.png') no-repeat center center; background-size: contain; cursor: pointer; }
-        .lang-select { background: #000; border: 1px solid #D4AF37; color: #D4AF37; padding: 10px; border-radius: 4px; font-size: 16px; }
-        #info-text { width: 85%; max-width: 340px; font-size: 13px; color: #fff; line-height: 1.6; text-align: left; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
+        /* 🚨 どんな比率でも画面を埋め尽くす 🚨 */
+        #gate-video { 
+            position: absolute; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            object-fit: cover; /* 隙間を許さない */
+            z-index: 500;
+        }
+        
+        /* アプリUI：セーフエリアを考慮した配置 */
+        #main-ui { 
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; 
+            z-index: 600; opacity: 0; pointer-events: none; 
+            display: flex; flex-direction: column; align-items: center; 
+            justify-content: space-around; 
+            padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
+            background: #000; transition: opacity 0.4s ease;
+        }
+        #main-ui.active { opacity: 1; pointer-events: auto; }
+
+        .breaker-btn { width: 110px; height: 110px; background: url('icon_s.png') no-repeat center center; background-size: contain; flex-shrink: 0; }
+        .lang-select { background: #000; border: 1px solid #D4AF37; color: #D4AF37; padding: 12px; border-radius: 6px; font-size: 16px; width: 120px; text-align: center; }
     </style>
 </head>
 
@@ -26,9 +43,9 @@
     </video>
 
     <div id="main-ui">
-        <div id="info-text">
-            <b>[NB_001_PROTO: SMILE FRIEND]</b><br>
-            2026/4/1適用の Google API 制限を無効化する 15万語の核知能。2.99ドルの実弾で、高精度翻訳を解放します。
+        <div style="width: 100%; max-width: 340px; font-size: 13px; line-height: 1.6; text-align: left; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">
+            <b>[NB_001_PROTO]</b><br>
+            Google API 2026/4/1 制限対応。15万語の核知能。2.99ドルの実弾で、高精度翻訳を解放します。
         </div>
 
         <div style="display:flex; gap:10px;">
@@ -38,14 +55,13 @@
 
         <div class="breaker-btn" onclick="goToStripe(event)"></div>
         
-        <div style="font-size:10px; opacity:0.3; letter-spacing:4px;">VOIDBONE // GLB</div>
+        <div style="font-size:9px; opacity:0.3; letter-spacing:3px;">VOIDBONE // GLOBAL_LANGUAGE_BREAKER</div>
     </div>
 
     <script>
         const video = document.getElementById('gate-video');
         const mainUI = document.getElementById('main-ui');
 
-        // 動画終了（loopを外した場合）またはクリックでUIへ
         function terminateGate() {
             video.style.display = 'none';
             mainUI.classList.add('active');
@@ -53,16 +69,9 @@
         }
 
         function goToStripe(e) {
-            e.stopPropagation(); // terminateGateの着火を防ぐ
+            e.stopPropagation();
             window.location.href = "https://buy.stripe.com/bJedRbefH5yogzZfuDasg09";
         }
-
-        // 自動再生がブラウザに阻止された場合の保険：1秒後に強制チェック
-        setTimeout(() => {
-            if (video.paused) {
-                console.log("Autoplay blocked. Waiting for click.");
-            }
-        }, 1000);
     </script>
 </body>
 </html>
