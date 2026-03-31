@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GLB | Global Language Breaker</title>
+    <style>
+        body { margin: 0; background: #000; color: #fff; font-family: 'Helvetica', sans-serif; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        
+        /* Onboarding Layer */
+        #gate-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity 1.5s; }
+        video { width: 100%; height: auto; outline: none; }
+
+        /* Main UI Layer */
+        #main-ui { display: none; text-align: center; opacity: 0; transition: opacity 1s; }
+        .glb-btn { width: 200px; height: 200px; background: url('icon.png') no-repeat center/contain; border: none; border-radius: 50%; cursor: pointer; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5)); transition: transform 0.1s, filter 0.3s; }
+        .glb-btn:active { transform: scale(0.95); filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.8)); }
+        
+        .status { margin-top: 30px; font-size: 0.9rem; letter-spacing: 0.5em; color: #ffd700; text-transform: uppercase; }
+        .brand { margin-top: 10px; font-size: 0.6rem; letter-spacing: 0.2em; color: #444; }
+    </style>
+</head>
+<body>
+
+<div id="gate-overlay" onclick="ignition()">
+    <video id="gate-video" playsinline muted poster="icon.png">
+        <source src="door.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div id="main-ui">
+    <button class="glb-btn" onclick="breaker()"></button>
+    <div class="status">READY</div>
+    <div class="brand">GLOBAL LANGUAGE BREAKER</div>
+</div>
+
+<script>
+    const gate = document.getElementById('gate-overlay');
+    const video = document.getElementById('gate-video');
+    const ui = document.getElementById('main-ui');
+
+    function ignition() {
+        video.play();
+        gate.onclick = null; // Prevent double trigger
+        
+        video.onended = () => {
+            gate.style.opacity = '0';
+            setTimeout(() => {
+                gate.style.display = 'none';
+                ui.style.display = 'block';
+                setTimeout(() => { ui.style.opacity = '1'; }, 50);
+            }, 1500);
+        };
+    }
+
+    function breaker() {
+        // Breaking logic will be injected here.
+        console.log("GLB: ACTIVE");
+    }
+</script>
+</body>
+</html>
