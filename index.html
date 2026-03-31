@@ -3,134 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GLB - Global Language Breaker</title>
+    <title>GLB</title>
     <style>
-    /* 🚨 レイヤーの再定義 🚨 */
-    #gate-video { z-index: 100; position: fixed; width: 100%; height: 100%; object-fit: cover; background: #000; }
-    #skip-btn { z-index: 200; position: fixed; top: 30px; right: 30px; padding: 10px 20px; border: 1px solid #D4AF37; color: #D4AF37; display: none; cursor: pointer; }
-    
-    /* メインUIは最初は「奥」に隠し、触らせない */
-    #main-ui { z-index: 1; position: fixed; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; opacity: 0; transition: opacity 0.5s; }
-    
-    /* 覚醒状態 */
-    #main-ui.active { z-index: 300; pointer-events: auto; opacity: 1; }
-<style>
-    /* 🚨 レイヤーの再定義 🚨 */
-    #gate-video { z-index: 100; position: fixed; width: 100%; height: 100%; object-fit: cover; background: #000; }
-    #skip-btn { z-index: 200; position: fixed; top: 30px; right: 30px; padding: 10px 20px; border: 1px solid #D4AF37; color: #D4AF37; display: none; cursor: pointer; }
-    
-    /* メインUIは最初は「奥」に隠し、触らせない */
-    #main-ui { z-index: 1; position: fixed; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; opacity: 0; transition: opacity 0.5s; }
-    
-    /* 覚醒状態 */
-    #main-ui.active { z-index: 300; pointer-events: auto; opacity: 1; }
-</style>
+        body { margin: 0; padding: 0; background: #000; overflow: hidden; font-family: sans-serif; }
+        /* 動画レイヤー */
+        #gate-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 100; background: #000; }
+        /* スキップボタン */
+        #skip-btn { position: fixed; top: 20px; right: 20px; z-index: 200; padding: 12px 24px; border: 1px solid #D4AF37; color: #D4AF37; display: none; cursor: pointer; background: rgba(0,0,0,0.5); border-radius: 5px; }
+        /* メインUI（最初は透明・クリック不可） */
+        #main-ui { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+        #main-ui.active { z-index: 300; pointer-events: auto; opacity: 1; }
+        .breaker-btn { width: 160px; height: 160px; background: url('icon.png') no-repeat center center; background-size: contain; cursor: pointer; }
+        .status { margin-top: 20px; color: #D4AF37; letter-spacing: 5px; font-size: 12px; }
+    </style>
+</head>
+<body onclick="startSequence()">
 
-<body>
-    <video id="gate-video" poster="poster.png" playsinline>
+    <video id="gate-video" playsinline muted poster="icon.png">
         <source src="door.mp4" type="video/mp4">
     </video>
-    <div id="skip-btn" onclick="breaker()">SKIP</div>
+    <div id="skip-btn" onclick="terminateGate(event)">SKIP</div>
 
     <div id="main-ui">
-        <div class="breaker-btn" onclick="activateStripe()"></div>
-        <div class="status" style="color:#D4AF37; margin-top:20px;">READY</div>
-    </div>
-
-    <script>
-        const video = document.getElementById('gate-video');
-        const skipBtn = document.getElementById('skip-btn');
-        const mainUI = document.getElementById('main-ui');
-
-        // 1. 画面タップで動画開始 & SKIP表示
-        document.body.onclick = function() {
-            if (video.paused) {
-                video.play();
-                skipBtn.style.display = 'block';
-            }
-        };
-
-        // 2. 動画終了またはSKIPでUI覚醒
-        video.onended = breaker;
-
-        function breaker() {
-            video.style.display = 'none';
-            skipBtn.style.display = 'none';
-            mainUI.classList.add('active'); // 黄金の紋章を「触れる状態」にする
-            if (navigator.vibrate) navigator.vibrate(50);
-        }
-
-        function activateStripe() {
-            // 小さい紋章を押した瞬間に Stripe へ射出
-            window.location.href = "https://buy.stripe.com/bJedRbefH5yogzZfuDasg09";
-        }
-    </script>
-</body>
-
-
-
-    <img src="poster.png" id="poster-image" onclick="openGate()">
-    <video id="gate-video" preload="auto">
-        <source src="door.mp4" type="video/mp4">
-    </video>
-    <div id="skip-btn" onclick="breaker()">SKIP</div>
-
-    <div id="main-ui">
-        <div class="breaker-btn" onclick="breaker()"></div>
+        <div class="breaker-btn" onclick="goToStripe()"></div>
         <div class="status">READY</div>
     </div>
 
     <script>
         const video = document.getElementById('gate-video');
-        const poster = document.getElementById('poster-image');
         const skipBtn = document.getElementById('skip-btn');
         const mainUI = document.getElementById('main-ui');
 
-        function openGate() {
-            poster.style.display = 'none';
-            video.style.display = 'block';
-            skipBtn.style.display = 'flex';
-            video.play();
-            video.addEventListener('ended', breaker);
-        }
-
-        // 🚨 VOIDBONE CORE LOGIC: BREAKER (STRIPE & FREE-MODE BLOCKADE)
-        async function breaker() {
-            // [1] HAPTIC & VISUAL
-            if (navigator.vibrate) navigator.vibrate(50);
-            video.pause();
-            mainUI.style.zStyle = '100'; // Make UI visible
-
-            // [2] SENSORY DECODE (Simulated for Web)
-            console.log("GLB_SECURITY: DECODING_USER_STATE...");
-
-            // [3] CHECK SUBSCRIPTION (If not paid, enforce FREE MODE)
-            // 🚨 [BLOCKADE]: THIS URL MUST BE YOUR STRIPE CHECKOUT 🚨
-            const stripeURL = "https://buy.stripe.com/bJedRbefH5yogzZfuDasg09";
-            
-            // Logic: Is user subscribed? (Need backend confirmation, simulate FALSE for now)
-            let isSubscribed = false; 
-
-            if (!isSubscribed) {
-                // [4] ENFORCE FREE MODE: OS NATIVE & CACHE ONLY
-                alert("GLB: FREE MODE ACTIVE.\nAPI ACCESS LIMITED.");
-                const rawInput = prompt("ENTER TEXT (FREE MODE - No Gemini)");
-                
-                // standard translator (free)
-                // Need Native Implementation for Mobile standard translation
-                // Local Cache Only. No external API.
-                
-                // If the prompt needs payment to get result...
-                alert("SMILE FRIEND (150K DICT) REQUIRED.\nREDIRECTING TO SANCTUM.");
-                window.location.href = stripeURL; // FORCE STRIPE REDIRECT
-                return;
+        function startSequence() {
+            if (video.paused) {
+                video.play().then(() => {
+                    skipBtn.style.display = 'block';
+                }).catch(err => terminateGate());
             }
-
-            // [5] PAID MODE (MISSION: VOID): ACTIVATE SMILE FRIEND
-            alert("SMILE FRIEND CONNECTED. VOID MODE.");
-            // Actual call to NE Gateway (Private Server) with 150K dict & Batching
         }
-    }
+
+        video.onended = terminateGate;
+
+        function terminateGate(e) {
+            if(e) e.stopPropagation();
+            video.style.display = 'none';
+            skipBtn.style.display = 'none';
+            mainUI.classList.add('active');
+            if (navigator.vibrate) navigator.vibrate(50);
+        }
+
+        function goToStripe() {
+            window.location.href = "https://buy.stripe.com/bJedRbefH5yogzZfuDasg09";
+        }
     </script>
 </body>
 </html>
