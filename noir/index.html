@@ -8,17 +8,17 @@
         body { background: #000; color: #FFD700; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
         .title { font-size: 1.2rem; font-weight: bold; letter-spacing: 0.3rem; margin-bottom: 2rem; text-transform: uppercase; }
         
-        /* ロゴをボタンとして実装 */
-        .glb-trigger {
-            width: 200px; height: 200px;
-            background: url('image.png') no-repeat center; /* 親方のロゴ */
+        /* GLBロゴをそのまま実行ボタンに (icon.png) */
+        .glb-logo-btn {
+            width: 220px; height: 220px;
+            background: url('icon.png') no-repeat center; /* 親方のロゴ */
             background-size: contain;
             border: none; cursor: pointer;
             filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
             transition: transform 0.1s, filter 0.1s;
-            margin: 2rem 0;
+            margin: 1rem 0;
         }
-        .glb-trigger:active { transform: scale(0.92); filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8)); }
+        .glb-logo-btn:active { transform: scale(0.92); filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8)); }
 
         .input-box { width: 85%; max-width: 450px; height: 120px; background: #111; border: 2px solid #FFD700; padding: 1rem; color: #FFD700; font-size: 1.3rem; outline: none; border-radius: 12px; resize: none; }
         .result-box { width: 85%; max-width: 450px; min-height: 80px; margin-top: 1.5rem; border-left: 4px solid #FFD700; padding: 1rem; background: rgba(255, 215, 0, 0.05); color: #FFF; font-size: 1.2rem; }
@@ -30,10 +30,10 @@
     
     <textarea class="input-box" id="userInput" placeholder="ENTER TEXT..."></textarea>
     
-    <button class="glb-trigger" onclick="executeGLB()"></button>
+    <button class="glb-logo-btn" onclick="executeGLB()"></button>
     
     <div class="result-box" id="resultArea">STATUS: SMILE_READY</div>
-    <div class="status">SMILE_CORE | NOIR_AUDIT_ACTIVE</div>
+    <div class="status">SMILE_BASE | FRIEND_BASE | SUTELA_NOIR</div>
 
     <script>
         async function executeGLB() {
@@ -42,22 +42,22 @@
             if(!text) return;
 
             resArea.style.color = "#FFD700";
-            resArea.innerText = "SMILE_SEARCHING...";
+            resArea.innerText = "BREAKING...";
 
             try {
                 // Smile Friend サーバー (8080) へ直結
                 const response = await fetch('http://127.0.0.1:8080/translate', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ text: text, mode: 'offline_smile' })
+                    body: JSON.stringify({ text: text, mode: 'strict' })
                 });
                 
                 const data = await response.json();
-                // ノワールの監査署名を確認
+                [span_0](start_span)// Friendノワールの監査署名を確認[span_0](end_span)
                 resArea.style.color = "#FFF";
                 resArea.innerText = data.result || "NO_DATA";
             } catch (e) {
-                // 完全切断時のノワール・フォールバック表示
+                // 通信エラー時のノワール・フォールバック
                 resArea.style.color = "#F00";
                 resArea.innerText = "USE STORED DICTIONARY";
             }
