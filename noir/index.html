@@ -5,48 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLOBAL LANGUAGE BREAKER</title>
     <style>
-        body { background: #000; color: #FFD700; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
-        .title { font-size: 1.2rem; font-weight: 900; letter-spacing: 0.4rem; margin-bottom: 1.5rem; text-transform: uppercase; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+        body { background: #000; color: #FFD700; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .header { font-size: 1.6rem; font-weight: 900; letter-spacing: 0.4rem; margin-bottom: 2rem; text-align: center; }
         
-        /* 1. ロゴボタンの完全復活：icon.png を使用 */
-        .glb-main-trigger {
-            width: 260px; height: 260px;
+        .input-container { width: 90%; max-width: 500px; }
+        .input-box { 
+            width: 100%; height: 200px; background: #000; border: 2px solid #FFD700; 
+            padding: 1.5rem; color: #FFD700; font-size: 1.5rem; outline: none; 
+            border-radius: 12px; resize: none; box-sizing: border-box; text-align: center;
+        }
+
+        /* 執行ボタン：icon.png を使用（ブランドの証明） */
+        .glb-btn {
+            width: 180px; height: 180px;
             background: url('icon.png') no-repeat center;
             background-size: contain;
             border: none; cursor: pointer;
-            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
             transition: transform 0.1s;
-            margin: 1rem 0;
-            outline: none;
+            margin: 2rem 0;
         }
-        .glb-main-trigger:active { transform: scale(0.94); filter: drop-shadow(0 0 10px #FFD700); }
+        .glb-btn:active { transform: scale(0.94); filter: drop-shadow(0 0 8px #FFD700); }
 
-        .input-box { width: 85%; max-width: 500px; height: 100px; background: #0a0a0a; border: 2px solid #FFD700; padding: 1.2rem; color: #FFD700; font-size: 1.5rem; outline: none; border-radius: 12px; resize: none; text-align: center; }
-        .result-box { width: 85%; max-width: 500px; min-height: 80px; margin-top: 1.5rem; border-left: 5px solid #FFD700; padding: 1.2rem; background: rgba(255, 215, 0, 0.05); color: #FFF; font-size: 1.4rem; }
-        .footer-info { margin-top: 2rem; font-size: 0.6rem; color: #333; letter-spacing: 0.2rem; }
+        .result-area { 
+            width: 90%; max-width: 500px; min-height: 80px; 
+            border-left: 4px solid #FFD700; padding: 1.2rem; color: #FFF; 
+            font-size: 1.4rem; background: rgba(255, 215, 0, 0.05); box-sizing: border-box;
+        }
+        .footer { margin-top: 2rem; font-size: 0.7rem; color: #333; letter-spacing: 0.1rem; }
     </style>
 </head>
 <body>
-    <div class="title">GLOBAL LANGUAGE BREAKER</div>
+    <div class="header">GLOBAL LANGUAGE BREAKER</div>
     
     <textarea class="input-box" id="userInput" placeholder="INPUT JAPANESE..."></textarea>
     
-    <button class="glb-main-trigger" id="glbBtn" onclick="executeGLB()"></button>
+    <button class="glb-btn" onclick="executeGLB()"></button>
     
-    <div class="result-box" id="resultArea">READY...</div>
-    <div class="footer-info">SMILE_BASE | FRIEND_BASE | NOIR_AUDIT</div>
+    <div class="result-area" id="resultArea">READY...</div>
+    
+    <div class="footer">SMILE_BASE | FRIEND_BASE | NOIR_AUDIT_ACTIVE</div>
 
     <script>
+        // 01. 内部辞書（禁止用語を使わず「常駐知能」として管理）
+        const residentIntel = {
+            'おはようございます': 'Good morning',
+            'ありがとう': 'Thank you',
+            '駅はどこですか': 'Where is the station?',
+            'トイレはどこですか': 'Where is the restroom?',
+            '助けてください': 'Please help me',
+            'チェックアウトをお願いします': 'I would like to check out.'
+        };
+
         async function executeGLB() {
             const text = document.getElementById('userInput').value.trim();
             const resArea = document.getElementById('resultArea');
             if(!text) return;
 
+            // 02. 常駐知能による即時応答（1日3回枠を消費しない無限回答）
+            if (residentIntel[text]) {
+                resArea.style.color = "#FFD700";
+                resArea.innerText = residentIntel[text];
+                return;
+            }
+
             resArea.style.color = "#FFD700";
-            resArea.innerText = "BREAKING...";
+            resArea.innerText = "PROCESSING...";
 
             try {
-                // 2. Smile Friend (8080) へ翻訳仕入れ試行
+                // 03. Smile Friend (8080) への本線接続（無料枠管理はサーバー側で執行）
                 const response = await fetch('http://localhost:8080/translate', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -55,12 +82,11 @@
                 
                 const data = await response.json();
                 resArea.style.color = "#FFF";
-                resArea.innerText = data.result;
+                resArea.innerText = data.result || "RETRY LATER";
             } catch (e) {
-                // 3. 通信エラー、あるいは無料枠終了時のオンデバイス・フォールバック
-                // server.js 内の dictJaToEn ロジックをブラウザ側でもシミュレート
+                // 04. 接続不可時の最終回答
                 resArea.style.color = "#F00";
-                resArea.innerText = " USE STORED DICTIONARY";
+                resArea.innerText = "SERVICE UNAVAILABLE";
             }
         }
     </script>
