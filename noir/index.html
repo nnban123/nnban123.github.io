@@ -3,51 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GLOBAL LANGUAGE BREAKER</title>
+    <title>GLB - OFF-LINE SMILE</title>
     <style>
-        body { background-color: #000; color: #FFD700; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .title { font-size: 1.5rem; font-weight: bold; letter-spacing: 0.2rem; margin-bottom: 2rem; text-transform: uppercase; }
-        .input-box { width: 85%; max-width: 500px; height: 200px; background: #111; border: 2px solid #FFD700; padding: 1.5rem; color: #FFD700; font-size: 1.4rem; outline: none; margin-bottom: 2.5rem; border-radius: 12px; resize: none; }
-        .glb-btn { width: 140px; height: 140px; border-radius: 50%; background: #FFD700; border: none; font-size: 1.8rem; font-weight: 900; color: #000; cursor: pointer; box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); transition: transform 0.1s, box-shadow 0.1s; }
-        .glb-btn:active { transform: scale(0.92); box-shadow: 0 0 10px rgba(255, 215, 0, 0.8); }
-        .result-area { margin-top: 2rem; width: 85%; max-width: 500px; min-height: 100px; color: #FFF; font-size: 1.5rem; text-align: left; padding: 1rem; border-left: 3px solid #FFD700; background: rgba(255, 215, 0, 0.05); }
-        .status-line { margin-top: 3rem; font-size: 0.7rem; color: #444; letter-spacing: 0.1rem; }
+        body { background: #000; color: #FFD700; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        /* ロゴボタンのスタイリング */
+        .glb-logo-btn {
+            background: url('image.png') no-repeat center; /* 親方のロゴを指定 */
+            background-size: contain;
+            width: 180px; height: 180px;
+            border: none; cursor: pointer;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+            transition: transform 0.1s;
+        }
+        .glb-logo-btn:active { transform: scale(0.9); }
+        .input-area { width: 80%; max-width: 400px; height: 100px; background: #111; border: 2px solid #FFD700; color: #FFD700; padding: 10px; font-size: 1.2rem; border-radius: 8px; margin-bottom: 20px; outline: none; }
+        .result-box { width: 80%; max-width: 400px; min-height: 50px; border-left: 3px solid #FFD700; padding: 10px; font-size: 1.1rem; color: #FFF; background: rgba(255, 215, 0, 0.05); }
     </style>
 </head>
 <body>
-    <div class="title">GLOBAL LANGUAGE BREAKER</div>
+    <textarea class="input-area" id="input" placeholder="TYPE HERE..."></textarea>
     
-    <textarea class="input-box" id="userInput" placeholder="ENTER TEXT..."></textarea>
-    
-    <button class="glb-btn" onclick="executeGLB()">GLB</button>
-    
-    <div class="result-area" id="resultArea">READY...</div>
-    
-    <div class="status-line">SHADOW_DEPLOY: v5.5 | NOIR_SYSTEM_ACTIVE</div>
+    <button class="glb-logo-btn" onclick="execute()"></button>
+
+    <div class="result-box" id="output">STATUS: LOCAL_READY</div>
 
     <script>
-        async function executeGLB() {
-            const text = document.getElementById('userInput').value.trim();
-            const resArea = document.getElementById('resultArea');
-            if(!text) return;
+        async function execute() {
+            const text = document.getElementById('input').value;
+            const output = document.getElementById('output');
             
-            resArea.style.color = "#FFD700";
-            resArea.innerText = "BREAKING...";
-
+            // オフライン判定・ローカル辞書チェック
+            // server.js の localDict にステラが待機している想定
+            output.innerText = "SMILE SEARCHING...";
+            
             try {
-                // Smile Friend (Stella/Noir Gateway) へ直結
-                const response = await fetch('http://127.0.0.1:8080/translate', {
+                const res = await fetch('http://127.0.0.1:8080/translate', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ text: text, mode: 'kiwami' })
+                    body: JSON.stringify({ text: text, mode: 'offline_smile' })
                 });
-                
-                const data = await response.json();
-                resArea.style.color = "#FFF";
-                resArea.innerText = data.result || "NO_DATA";
+                const data = await res.json();
+                output.innerText = data.result;
             } catch (e) {
-                resArea.style.color = "#F00";
-                resArea.innerText = "GATEWAY_OFFLINE";
+                // 完全切断時のノワール・フォールバック
+                output.innerText = "OFFLINE: USE STORED DICTIONARY";
             }
         }
     </script>
