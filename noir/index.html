@@ -5,67 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLOBAL LANGUAGE BREAKER</title>
     <style>
-        body { 
-            background: #000; color: #FFD700; font-family: 'Courier New', monospace; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            height: 100vh; margin: 0; overflow: hidden; 
-        }
-        .title { 
-            font-size: 1.2rem; font-weight: bold; letter-spacing: 0.4rem; 
-            margin-bottom: 2rem; text-transform: uppercase; text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-        }
+        body { background: #000; color: #FFD700; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .title { font-size: 1.5rem; font-weight: 900; letter-spacing: 0.5rem; margin-bottom: 2rem; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
         
-        /* THE CIRCLE GLB BUTTON */
-        .glb-circle-btn {
-            width: 180px; height: 180px;
-            border-radius: 50%;
-            background: #000;
-            border: 4px solid #FFD700;
-            color: #FFD700;
-            font-size: 2.2rem;
-            font-weight: 900;
-            cursor: pointer;
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; align-items: center; justify-content: center;
-            margin: 2rem 0;
-            outline: none;
+        /* 執行ボタン：icon.png を使用 */
+        .glb-btn {
+            width: 220px; height: 220px;
+            background: url('icon.png') no-repeat center;
+            background-size: contain;
+            border: none; cursor: pointer;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.2));
+            transition: transform 0.1s;
+            margin-bottom: 2rem;
         }
-        .glb-circle-btn:hover {
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
-            background: rgba(255, 215, 0, 0.05);
-        }
-        .glb-circle-btn:active {
-            transform: scale(0.92);
-            background: #FFD700;
-            color: #000;
-            box-shadow: 0 0 10px #FFD700;
-        }
+        .glb-btn:active { transform: scale(0.95); filter: drop-shadow(0 0 5px #FFD700); }
 
         .input-box { 
-            width: 85%; max-width: 450px; height: 120px; background: #111; 
-            border: 2px solid #FFD700; padding: 1.2rem; color: #FFD700; 
-            font-size: 1.4rem; outline: none; border-radius: 15px; resize: none; 
-            text-align: center;
+            width: 85%; max-width: 500px; height: 100px; background: #0a0a0a; 
+            border: 2px solid #FFD700; padding: 1rem; color: #FFD700; 
+            font-size: 1.4rem; border-radius: 10px; outline: none; text-align: center;
         }
-        .result-area { 
-            width: 85%; max-width: 450px; min-height: 80px; margin-top: 2rem; 
-            border-left: 4px solid #FFD700; padding: 1rem; 
+        .result-box { 
+            width: 85%; max-width: 500px; min-height: 80px; margin-top: 1.5rem; 
+            border-left: 5px solid #FFD700; padding: 1rem; 
             background: rgba(255, 215, 0, 0.05); color: #FFF; font-size: 1.3rem; 
         }
-        .status-footer { margin-top: 3rem; font-size: 0.6rem; color: #333; letter-spacing: 0.15rem; }
     </style>
 </head>
 <body>
     <div class="title">GLOBAL LANGUAGE BREAKER</div>
     
-    <textarea class="input-box" id="userInput" placeholder="ENTER TEXT..."></textarea>
+    <textarea class="input-box" id="userInput" placeholder="INPUT JAPANESE..."></textarea>
     
-    <button class="glb-circle-btn" onclick="executeGLB()">GLB</button>
+    <button class="glb-btn" onclick="executeGLB()"></button>
     
-    <div class="result-area" id="resultArea">STATUS: READY</div>
-    
-    <div class="status-footer">SMILE_BASE | FRIEND_BASE | NOIR_AUDIT_ACTIVE</div>
+    <div class="result-box" id="resultArea">READY...</div>
 
     <script>
         async function executeGLB() {
@@ -74,23 +48,28 @@
             if(!text) return;
 
             resArea.style.color = "#FFD700";
-            resArea.innerText = "BREAKING...";
+            resArea.innerText = "SMILE_PROCESSING...";
 
             try {
-                // Smile Friend Server (Stella & Noir Base) 直結
+                // ターゲットは Smile Friend 8080ポート直結
                 const response = await fetch('http://127.0.0.1:8080/translate', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ text: text, mode: 'strict' })
+                    body: JSON.stringify({ 
+                        text: text, 
+                        mode: 'strict',
+                        from: 'ja',
+                        to: 'en'
+                    })
                 });
                 
                 const data = await response.json();
+                // 親方の server.js が返す result を表示
                 resArea.style.color = "#FFF";
-                resArea.innerText = data.result || "NO_DATA";
+                resArea.innerText = data.result;
             } catch (e) {
-                // Offline Fallback (ノワール監査済みキャッシュの示唆)
                 resArea.style.color = "#F00";
-                resArea.innerText = " USE STORED DICTIONARY";
+                resArea.innerText = "Smile_ERROR:UNREACHABLE";
             }
         }
     </script>
