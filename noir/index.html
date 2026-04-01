@@ -1,20 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>GLB - ULTIMATE BREAKER</title>
-    <style>
-        body { background: #000; color: #d4af37; font-family: serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .engine-status { text-align: center; border: 1px solid #d4af37; padding: 40px; }
-    </style>
-</head>
-<body>
-    <div class="engine-status">
-        <h1>GLB CORE ACTIVE</h1>
-        <p>ON-DEVICE PIVOT: ENABLED</p>
-        <p>TRAVEL MODE: ARCHITECTING...</p>
-        <hr>
-        <p>司令。ここはパパだけの聖域です。世界を壊す準備を始めましょう。</p>
-    </div>
-</body>
-</html>
+<div class="engine-status">
+    <h2>GLB TRANSLATION CORE</h2>
+    <textarea id="input" placeholder="パパ、翻訳したい思想をここへ..." style="width:100%; background:#111; color:#d4af37; border:1px solid #d4af37; padding:10px;"></textarea>
+    <br><br>
+    <button onclick="translateCore()" style="background:#d4af37; color:#000; padding:10px 20px; font-weight:bold; cursor:pointer;">EXECUTE TRANSLATION</button>
+    <hr>
+    <div id="output" style="white-space:pre-wrap; text-align:left;">[ 待機中... ]</div>
+</div>
+
+<script>
+function translateCore() {
+    const input = document.getElementById('input').value;
+    const output = document.getElementById('output');
+    
+    // 思想コードに基づいた簡易版トモリ・ロジック
+    if (input.includes("バカ") || input.length < 2) {
+        output.innerText = "ハザード：現在、その対話のリズムは推奨されません。敬意を再確認してください。";
+    } else {
+        // ここにパパの翻訳ロジック（またはAPI）を物理接続します
+        output.innerText = "Synchronizing Nori Intent...\n[ 思想翻訳結果 ]\n" + "Your intent has been translated into global context.";
+    }
+}
+</script>
