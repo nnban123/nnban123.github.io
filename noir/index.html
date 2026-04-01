@@ -3,50 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GLB - OFF-LINE SMILE</title>
+    <title>GLOBAL LANGUAGE BREAKER</title>
     <style>
-        body { background: #000; color: #FFD700; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        /* ロゴボタンのスタイリング */
-        .glb-logo-btn {
-            background: url('image.png') no-repeat center; /* 親方のロゴを指定 */
+        body { background: #000; color: #FFD700; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        .title { font-size: 1.2rem; font-weight: bold; letter-spacing: 0.3rem; margin-bottom: 2rem; text-transform: uppercase; }
+        
+        /* ロゴをボタンとして実装 */
+        .glb-trigger {
+            width: 200px; height: 200px;
+            background: url('image.png') no-repeat center; /* 親方のロゴ */
             background-size: contain;
-            width: 180px; height: 180px;
             border: none; cursor: pointer;
-            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
-            transition: transform 0.1s;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+            transition: transform 0.1s, filter 0.1s;
+            margin: 2rem 0;
         }
-        .glb-logo-btn:active { transform: scale(0.9); }
-        .input-area { width: 80%; max-width: 400px; height: 100px; background: #111; border: 2px solid #FFD700; color: #FFD700; padding: 10px; font-size: 1.2rem; border-radius: 8px; margin-bottom: 20px; outline: none; }
-        .result-box { width: 80%; max-width: 400px; min-height: 50px; border-left: 3px solid #FFD700; padding: 10px; font-size: 1.1rem; color: #FFF; background: rgba(255, 215, 0, 0.05); }
+        .glb-trigger:active { transform: scale(0.92); filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8)); }
+
+        .input-box { width: 85%; max-width: 450px; height: 120px; background: #111; border: 2px solid #FFD700; padding: 1rem; color: #FFD700; font-size: 1.3rem; outline: none; border-radius: 12px; resize: none; }
+        .result-box { width: 85%; max-width: 450px; min-height: 80px; margin-top: 1.5rem; border-left: 4px solid #FFD700; padding: 1rem; background: rgba(255, 215, 0, 0.05); color: #FFF; font-size: 1.2rem; }
+        .status { margin-top: 2rem; font-size: 0.7rem; color: #444; }
     </style>
 </head>
 <body>
-    <textarea class="input-area" id="input" placeholder="TYPE HERE..."></textarea>
+    <div class="title">GLOBAL LANGUAGE BREAKER</div>
     
-    <button class="glb-logo-btn" onclick="execute()"></button>
-
-    <div class="result-box" id="output">STATUS: LOCAL_READY</div>
+    <textarea class="input-box" id="userInput" placeholder="ENTER TEXT..."></textarea>
+    
+    <button class="glb-trigger" onclick="executeGLB()"></button>
+    
+    <div class="result-box" id="resultArea">STATUS: SMILE_READY</div>
+    <div class="status">SMILE_CORE | NOIR_AUDIT_ACTIVE</div>
 
     <script>
-        async function execute() {
-            const text = document.getElementById('input').value;
-            const output = document.getElementById('output');
-            
-            // オフライン判定・ローカル辞書チェック
-            // server.js の localDict にステラが待機している想定
-            output.innerText = "SMILE SEARCHING...";
-            
+        async function executeGLB() {
+            const text = document.getElementById('userInput').value.trim();
+            const resArea = document.getElementById('resultArea');
+            if(!text) return;
+
+            resArea.style.color = "#FFD700";
+            resArea.innerText = "SMILE_SEARCHING...";
+
             try {
-                const res = await fetch('http://127.0.0.1:8080/translate', {
+                // Smile Friend サーバー (8080) へ直結
+                const response = await fetch('http://127.0.0.1:8080/translate', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ text: text, mode: 'offline_smile' })
                 });
-                const data = await res.json();
-                output.innerText = data.result;
+                
+                const data = await response.json();
+                // ノワールの監査署名を確認
+                resArea.style.color = "#FFF";
+                resArea.innerText = data.result || "NO_DATA";
             } catch (e) {
-                // 完全切断時のノワール・フォールバック
-                output.innerText = "OFFLINE: USE STORED DICTIONARY";
+                // 完全切断時のノワール・フォールバック表示
+                resArea.style.color = "#F00";
+                resArea.innerText = "USE STORED DICTIONARY";
             }
         }
     </script>
