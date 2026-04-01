@@ -1,29 +1,44 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GLB CORE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLOBAL LANGUAGE BREAKER</title>
     <style>
-        body { background: #000; color: #d4af37; font-family: sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; }
-        h2 { font-size: 24px; text-align: center; margin-bottom: 20px; letter-spacing: 2px; }
-        textarea { width: 100%; flex-grow: 1; background: #111; color: #fff; border: 2px solid #d4af37; border-radius: 10px; padding: 15px; font-size: 18px; box-sizing: border-box; margin-bottom: 20px; }
-        button { width: 100%; height: 60px; background: #d4af37; color: #000; border: none; border-radius: 10px; font-size: 20px; font-weight: bold; cursor: pointer; }
-        #output { margin-top: 20px; padding: 15px; border-top: 1px solid #444; font-size: 18px; line-height: 1.5; color: #d4af37; min-height: 100px; }
+        body { background-color: #000; color: #FFD700; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .title { font-size: 1.5rem; font-weight: bold; letter-spacing: 0.2rem; margin-bottom: 2rem; }
+        .input-box { width: 80%; max-width: 400px; background: #111; border: 2px solid #FFD700; padding: 1rem; color: #FFD700; font-size: 1.2rem; outline: none; margin-bottom: 2rem; border-radius: 8px; }
+        .glb-btn { width: 120px; height: 120px; border-radius: 50%; background: #FFD700; border: none; font-size: 1.5rem; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); transition: transform 0.1s; }
+        .glb-btn:active { transform: scale(0.95); }
+        .status { margin-top: 2rem; font-size: 0.8rem; color: #555; }
+        .result { margin-top: 1rem; width: 80%; max-width: 400px; font-size: 1.2rem; text-align: left; border-left: 2px solid #FFD700; padding-left: 1rem; }
     </style>
 </head>
 <body>
-    <h2>GLB CORE</h2>
-    <textarea id="input" placeholder="ここに日本語を入力..."></textarea>
-    <button onclick="translateCore()">EXECUTE</button>
-    <div id="output">READY...</div>
+    <div class="title">GLOBAL LANGUAGE BREAKER</div>
+    <input type="text" class="input-box" id="userInput" placeholder="INPUT HERE...">
+    <button class="glb-btn" onclick="executeGLB()">GLB</button>
+    <div class="result" id="resultArea">STATUS: READY</div>
+    <div class="status">v5.5 SHADOW DEPLOYED</div>
 
     <script>
-        function translateCore() {
-            const val = document.getElementById('input').value;
-            const out = document.getElementById('output');
-            if(!val) return;
-            out.innerText = "Synchronizing...\n[ 思想翻訳 ]\n" + "Converting your intent to Global English...";
+        async function executeGLB() {
+            const text = document.getElementById('userInput').value;
+            const resArea = document.getElementById('resultArea');
+            if(!text) return;
+            
+            resArea.innerText = "BREAKING...";
+            try {
+                const response = await fetch('http://127.0.0.1:8080/translate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ text: text, mode: 'kiwami' })
+                });
+                const data = await response.json();
+                resArea.innerText = data.result || "ERROR";
+            } catch (e) {
+                resArea.innerText = "CONNECTION FAILED";
+            }
         }
     </script>
 </body>
