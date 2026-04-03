@@ -6,7 +6,6 @@
   <title>GLB | NEXT BASE</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    /* トップ専用のエクストリーム・デザイン */
     body { background: #000; overflow-x: hidden; }
     
     .hero-content {
@@ -15,10 +14,9 @@
       animation: fadeIn 1.2s ease-out;
     }
 
-    .logo-container {
-      margin-bottom: 30px;
-    }
+    .logo-container { margin-bottom: 30px; }
 
+    /* ファイル名を icon.png へ修正 */
     .logo-img {
       width: 100px;
       height: auto;
@@ -36,6 +34,7 @@
       background: #000;
     }
 
+    /* ファイル名を door.mp4 へ修正 */
     video { width: 100%; display: block; }
 
     .main-title {
@@ -55,7 +54,6 @@
       letter-spacing: 0.1em;
     }
 
-    /* 魂のGOボタン */
     .btn-launch {
       display: inline-block;
       background: var(--gold-2);
@@ -68,8 +66,6 @@
       letter-spacing: 0.2em;
       box-shadow: var(--shadow-gold);
       transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-      position: relative;
-      overflow: hidden;
     }
 
     .btn-launch:hover {
@@ -106,24 +102,21 @@
       color: var(--muted);
       text-decoration: none;
       font-size: 12px;
-      transition: 0.3s;
     }
-
-    .footer-links a:hover { color: var(--gold); }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="hero-content">
       <div class="logo-container">
-        <img src="logo.png" alt="GLB" class="logo-img">
+        <img src="icon.png" alt="GLB" class="logo-img">
       </div>
       
       <h1 class="main-title">GLB</h1>
       <p class="slogan">Meaning, Delivered.</p>
 
       <div class="video-frame">
-        <video src="video.mp4" autoplay loop muted playsinline></video>
+        <video src="door.mp4" autoplay loop muted playsinline></video>
       </div>
 
       <p class="lead" style="max-width: 600px; margin: 0 auto 40px; line-height: 1.8;">
@@ -140,7 +133,6 @@
       <a href="privacy.html">Privacy Policy</a>
       <a href="terms.html">Terms of Service</a>
       <a href="legal.html">Legal Notice</a>
-      <p style="width: 100%; text-align: center; opacity: 0.3; margin-top: 20px;">© NEXT BASE</p>
     </footer>
   </div>
 </body>
