@@ -2,93 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GLOBAL LANGUAGE BREAKER</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>GLB - NEXTBASE GLOBAL</title>
     <style>
-        body { background: #000; color: #FFD700; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .header { font-size: 1.6rem; font-weight: 900; letter-spacing: 0.4rem; margin-bottom: 2rem; text-align: center; }
+        :root { --gold: #D4AF37; --black: #000; }
+        body, html { margin: 0; padding: 0; background: var(--black); color: var(--gold); font-family: -apple-system, sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
         
-        .input-container { width: 90%; max-width: 500px; }
-        .input-box { 
-            width: 100%; height: 200px; background: #000; border: 2px solid #FFD700; 
-            padding: 1.5rem; color: #FFD700; font-size: 1.5rem; outline: none; 
-            border-radius: 12px; resize: none; box-sizing: border-box; text-align: center;
-        }
+        /* Section 1: Splash (邪魔をしない扉) */
+        .splash { height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
+        #bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; z-index: 1; }
+        .logo-btn { width: 170px; cursor: pointer; z-index: 10; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .logo-btn:hover { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(212,175,55,0.6)); }
 
-        /* 執行ボタン：icon.png を使用（ブランドの証明） */
-        .glb-btn {
-            width: 180px; height: 180px;
-            background: url('icon.png') no-repeat center;
-            background-size: contain;
-            border: none; cursor: pointer;
-            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
-            transition: transform 0.1s;
-            margin: 2rem 0;
-        }
-        .glb-btn:active { transform: scale(0.94); filter: drop-shadow(0 0 8px #FFD700); }
+        /* Section 2: Onboarding (ワクワクの源泉) */
+        .onboarding { padding: 100px 25px; text-align: center; max-width: 600px; margin: 0 auto; }
+        .feature-card { border: 1px solid rgba(212,175,55,0.2); border-radius: 35px; padding: 50px 25px; margin-bottom: 30px; background: rgba(10,10,10,0.8); backdrop-filter: blur(10px); }
+        .feature-card h3 { margin: 0 0 15px; font-size: 1.5rem; letter-spacing: 4px; color: #fff; }
+        .feature-card p { color: #888; font-size: 1.05rem; line-height: 1.7; margin: 0; }
 
-        .result-area { 
-            width: 90%; max-width: 500px; min-height: 80px; 
-            border-left: 4px solid #FFD700; padding: 1.2rem; color: #FFF; 
-            font-size: 1.4rem; background: rgba(255, 215, 0, 0.05); box-sizing: border-box;
-        }
-        .footer { margin-top: 2rem; font-size: 0.7rem; color: #333; letter-spacing: 0.1rem; }
+        /* Pricing (敬意ある選択) */
+        .pricing-zone { margin-top: 60px; padding-bottom: 120px; text-align: center; }
+        .btn-premium { background: var(--gold); color: #000; border: none; width: 100%; max-width: 350px; padding: 25px; font-weight: 900; border-radius: 25px; font-size: 1.2rem; cursor: pointer; margin-bottom: 20px; transition: 0.3s; }
+        .btn-standard { background: transparent; color: var(--gold); border: 2px solid var(--gold); width: 100%; max-width: 350px; padding: 20px; font-weight: 700; border-radius: 25px; font-size: 1.1rem; cursor: pointer; margin-bottom: 20px; }
+        .btn-try { color: #666; text-decoration: underline; font-size: 0.9rem; border: none; background: none; cursor: pointer; }
+
+        footer { padding: 50px 0; opacity: 0.3; font-size: 0.75rem; border-top: 1px solid #222; }
+        footer a { color: var(--gold); margin: 0 10px; text-decoration: none; }
     </style>
 </head>
 <body>
-    <div class="header">GLOBAL LANGUAGE BREAKER</div>
-    
-    <textarea class="input-box" id="userInput" placeholder="INPUT JAPANESE..."></textarea>
-    
-    <button class="glb-btn" onclick="executeGLB()"></button>
-    
-    <div class="result-area" id="resultArea">READY...</div>
-    
-    <div class="footer">SMILE_BASE | FRIEND_BASE | NOIR_AUDIT_ACTIVE</div>
 
-    <script>
-        // 01. 内部辞書（禁止用語を使わず「常駐知能」として管理）
-        const residentIntel = {
-            'おはようございます': 'Good morning',
-            'ありがとう': 'Thank you',
-            '駅はどこですか': 'Where is the station?',
-            'トイレはどこですか': 'Where is the restroom?',
-            '助けてください': 'Please help me',
-            'チェックアウトをお願いします': 'I would like to check out.'
-        };
+    <section class="splash">
+        <video autoplay muted loop playsinline id="bg-video"><source src="bg.mp4" type="video/mp4"></video>
+        <img src="logo.png" class="logo-btn" onclick="document.getElementById('intro').scrollIntoView()" alt="GLB LOGO">
+    </section>
 
-        async function executeGLB() {
-            const text = document.getElementById('userInput').value.trim();
-            const resArea = document.getElementById('resultArea');
-            if(!text) return;
+    <section class="onboarding" id="intro">
+        <h2 style="letter-spacing: 10px; margin-bottom: 60px;">NEXT LEVEL</h2>
+        
+        <div class="feature-card">
+            <h3>NO MORE FEAR</h3>
+            <p>We provide real-time local manners and tipping guides. Walk any street with a confident smile.</p>
+        </div>
 
-            // 02. 常駐知能による即時応答（1日3回枠を消費しない無限回答）
-            if (residentIntel[text]) {
-                resArea.style.color = "#FFD700";
-                resArea.innerText = residentIntel[text];
-                return;
-            }
+        <div class="feature-card">
+            <h3>INSTANT CONNECT</h3>
+            <p>150,000 specialized phrases at your fingertips. Tilt your iPhone to speak through the screen.</p>
+        </div>
 
-            resArea.style.color = "#FFD700";
-            resArea.innerText = "PROCESSING...";
+        <div class="pricing-zone">
+            <button class="btn-premium" onclick="location.href='https://buy.stripe.com/7sY28t7Rje4UgzZ1DNasg0q'">ACTIVATE TRAVEL MODE ($24.99)</button>
+            
+            <button class="btn-standard" onclick="location.href='https://buy.stripe.com/bJedRbefH5yogzZfuDasg09'">GET BASIC PASS ($2.99)</button>
+            
+            <button class="btn-try" onclick="location.href='translate.html'">Try for free</button>
+        </div>
 
-            try {
-                // 03. Smile Friend (8080) への本線接続（無料枠管理はサーバー側で執行）
-                const response = await fetch('http://localhost:8080/translate', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ text: text, mode: 'strict' })
-                });
-                
-                const data = await response.json();
-                resArea.style.color = "#FFF";
-                resArea.innerText = data.result || "RETRY LATER";
-            } catch (e) {
-                // 04. 接続不可時の最終回答
-                resArea.style.color = "#F00";
-                resArea.innerText = "SERVICE UNAVAILABLE";
-            }
-        }
-    </script>
+        <footer>
+            <a href="support.html">SUPPORT</a> | <a href="terms.html">TERMS</a> | <a href="privacy.html">PRIVACY</a>
+            <p>© 2026 NEXTBASE GLOBAL</p>
+        </footer>
+    </section>
+
 </body>
 </html>
