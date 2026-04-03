@@ -4,136 +4,126 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GLB | NEXT BASE</title>
-  <link rel="stylesheet" href="styles.css" />
   <style>
-    body { background: #000; overflow-x: hidden; }
-    
-    .hero-content {
-      text-align: center;
-      padding: 60px 20px;
-      animation: fadeIn 1.2s ease-out;
-    }
-
-    .logo-container { margin-bottom: 30px; }
-
-    /* ファイル名を icon.png へ修正 */
-    .logo-img {
-      width: 100px;
-      height: auto;
-      filter: drop-shadow(var(--shadow-gold));
-    }
-
-    .video-frame {
+    /* 全体設定 */
+    body, html {
+      margin: 0;
+      padding: 0;
       width: 100%;
-      max-width: 900px;
-      margin: 40px auto;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow-neon);
-      overflow: hidden;
-      background: #000;
+      height: 100%;
+      overflow: hidden; /* スクロール禁止 */
+      background-color: #000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    /* ファイル名を door.mp4 へ修正 */
-    video { width: 100%; display: block; }
+    /* 動画を背景に固定 */
+    .video-background {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -1;
+      transform: translate(-50%, -50%);
+    }
+
+    /* 前面のコンテンツレイヤー */
+    .overlay {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; /* 上下中央に配置 */
+      align-items: center;
+      background: rgba(0, 0, 0, 0.3); /* 動画を少し暗くして視認性アップ */
+      padding: 60px 0;
+      box-sizing: border-box;
+    }
+
+    /* ロゴ */
+    .logo-img {
+      width: 120px;
+      height: auto;
+      filter: drop-shadow(0 0 15px rgba(255, 217, 120, 0.5));
+    }
+
+    /* 中央のメインエリア */
+    .main-box {
+      text-align: center;
+    }
 
     .main-title {
-      font-size: clamp(60px, 10vw, 120px);
+      font-size: 72px;
       font-weight: 900;
-      letter-spacing: -0.02em;
+      color: #fff;
       margin: 0;
-      background: linear-gradient(135deg, #fff 30%, var(--gold) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.2em;
+      text-shadow: 0 0 20px rgba(0,0,0,0.8);
     }
 
-    .slogan {
-      font-size: clamp(18px, 3vw, 28px);
-      color: var(--muted);
-      margin: 20px 0 40px;
-      letter-spacing: 0.1em;
-    }
-
-    .btn-launch {
+    /* STARTボタン：絶対にクリック可能に */
+    .btn-start {
       display: inline-block;
-      background: var(--gold-2);
+      margin-top: 30px;
+      background: #ffd978; /* gold-2 */
       color: #000;
-      padding: 24px 80px;
+      padding: 20px 80px;
       font-size: 24px;
       font-weight: 900;
       text-decoration: none;
-      border-radius: 60px;
-      letter-spacing: 0.2em;
-      box-shadow: var(--shadow-gold);
-      transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+      border-radius: 50px;
+      box-shadow: 0 0 30px rgba(255, 217, 120, 0.6);
+      transition: transform 0.2s;
     }
 
-    .btn-launch:hover {
-      transform: scale(1.1) translateY(-5px);
+    .btn-start:hover {
+      transform: scale(1.1);
       background: #fff;
-      box-shadow: 0 20px 40px rgba(255, 217, 120, 0.4);
     }
 
-    .price-notice {
-      margin-top: 20px;
-      color: var(--neon);
+    .price-tag {
+      color: #69f0ff; /* neon */
       font-weight: bold;
-      letter-spacing: 0.3em;
-      font-size: 14px;
-      text-transform: uppercase;
+      margin-top: 15px;
+      letter-spacing: 0.1em;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .footer-links {
-      margin-top: 100px;
-      padding: 40px;
-      border-top: 1px solid var(--line);
+    /* フッターリンク */
+    .footer-nav {
       display: flex;
-      justify-content: center;
-      gap: 24px;
-      flex-wrap: wrap;
+      gap: 20px;
     }
 
-    .footer-links a {
-      color: var(--muted);
+    .footer-nav a {
+      color: rgba(255,255,255,0.6);
       text-decoration: none;
-      font-size: 12px;
+      font-size: 13px;
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="hero-content">
-      <div class="logo-container">
-        <img src="icon.png" alt="GLB" class="logo-img">
-      </div>
-      
+
+  <video autoplay loop muted playsinline class="video-background">
+    <source src="door.mp4" type="video/mp4">
+  </video>
+
+  <div class="overlay">
+    <img src="icon.png" alt="GLB Logo" class="logo-img"> <div class="main-box">
       <h1 class="main-title">GLB</h1>
-      <p class="slogan">Meaning, Delivered.</p>
-
-      <div class="video-frame">
-        <video src="door.mp4" autoplay loop muted playsinline></video>
-      </div>
-
-      <p class="lead" style="max-width: 600px; margin: 0 auto 40px; line-height: 1.8;">
-        English fluency is no longer a requirement.<br>
-        Built for users who need to be understood, not just translated.
-      </p>
-
-      <a href="translate.html" class="btn-launch">START</a>
-      <p class="price-notice">$2.99 / One-time Access</p>
+      <a href="translate.html" class="btn-start">START</a> <p class="price-tag">$2.99 / One-time Access</p>
     </div>
 
-    <footer class="footer-links">
+    <nav class="footer-nav">
       <a href="support.html">Support</a>
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="terms.html">Terms of Service</a>
-      <a href="legal.html">Legal Notice</a>
-    </footer>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="legal.html">Legal</a>
+    </nav>
   </div>
+
 </body>
 </html>
