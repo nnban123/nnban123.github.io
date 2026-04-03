@@ -3,85 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>GLB - Global Language Breaker</title>
+    <title>GLB - Global Language Breaker | NEXTBASE ONE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root { --gold: #D4AF37; --black: #050505; }
-        body { background: var(--black); color: white; font-family: 'Inter', sans-serif; letter-spacing: -0.02em; }
-        .glass { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px); }
-        .btn-premium { background: var(--gold); color: black; transition: all 0.2s ease; }
-        .btn-premium:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(212,175,55,0.3); }
+        body { background: var(--black); color: white; font-family: 'Inter', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+        .glass { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(24px); }
+        .btn-premium { background: var(--gold); color: black; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-premium:hover { transform: translateY(-1px); box-shadow: 0 15px 45px rgba(212,175,55,0.25); }
+        .system-font { font-family: 'Courier New', monospace; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="p-6 flex flex-col items-center min-h-screen">
+<body class="flex flex-col items-center min-h-screen px-6 pb-20 pt-10">
 
-    <header class="w-full max-w-md text-center py-12">
-        <h1 class="text-6xl font-black italic tracking-tighter mb-2">GLB</h1>
-        <p class="text-[10px] tracking-[0.5em] text-[#D4AF37] font-bold">GLOBAL LANGUAGE BREAKER</p>
+    <header class="w-full max-w-md text-left mb-12 px-2">
+        <div class="flex justify-between items-end">
+            <h1 class="text-7xl font-black italic tracking-tighter text-white">GLB</h1>
+            <div class="text-[9px] text-right text-gray-500 system-font leading-tight">
+                STATUS: DEPLOYED<br>VER: 1.5.0_PROTOTYPE<br>GATEWAY: NEXTBASE_ONE
+            </div>
+        </div>
+        <p class="text-[10px] tracking-[0.6em] text-[#D4AF37] font-bold mt-4 uppercase">Global Language Breaker Protocol</p>
     </header>
 
-    <main class="w-full max-w-md space-y-8">
-        <section class="glass p-8 rounded-[2.5rem] text-center">
-            <h2 class="text-[10px] font-bold mb-6 tracking-[0.2em] text-gray-500 uppercase">Premium Intelligence Access</h2>
-            <p class="text-5xl font-black mb-8">$2.99<span class="text-sm font-light text-gray-500 italic"> / month</span></p>
+    <main class="w-full max-w-md space-y-12">
+        <section class="glass p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 text-[8px] system-font text-gray-700">TX_AUTH_SECURED</div>
+            <h2 class="text-[10px] font-bold mb-10 tracking-[0.3em] text-gray-500 uppercase border-b border-white/5 pb-4">Subscription Plan: Premium Access</h2>
+            
+            <div class="flex items-baseline gap-2 mb-8">
+                <span class="text-6xl font-black tracking-tighter">$2.99</span>
+                <span class="text-sm font-light text-gray-500 italic">USD / month</span>
+            </div>
+
+            <ul class="text-[11px] text-gray-400 space-y-3 mb-10 system-font">
+                <li class="flex gap-2"><span>[✓]</span> Unlimited High-Fidelity Processing</li>
+                <li class="flex gap-2"><span>[✓]</span> Priority Gateway Routing (GCP-NEXUS)</li>
+                <li class="flex gap-2"><span>[✓]</span> Context-Aware Emotional Optimization</li>
+                <li class="flex gap-2"><span>[✓]</span> Zero-Log Privacy Protocol Tier 3</li>
+            </ul>
             
             <a href="https://buy.stripe.com/bJedRbefH5yogzZfuDasg09" 
-               class="block w-full py-6 btn-premium rounded-2xl font-black text-xl mb-4">
-                UNLOCK NOW
+               class="block w-full py-7 btn-premium rounded-xl font-black text-2xl text-center shadow-lg active:scale-95 transition-transform uppercase italic tracking-tighter">
+                Unlock Unlimited Access
             </a>
-            <p class="text-[11px] text-gray-400 leading-relaxed px-4">
-                Break the limits of conventional translation. <br>
-                Direct thought-to-language processing.
+            
+            <p class="text-[10px] text-gray-600 mt-8 text-justify leading-relaxed px-1">
+                Notice: By unlocking, you gain full access to the NEXTBASE ONE linguistic engine. This provides direct thought-to-language processing and breaks all conventional trial limits.
             </p>
         </section>
 
-        <section class="glass p-5 rounded-[2.5rem] flex flex-col h-[380px]">
-            <div id="chat-box" class="flex-1 overflow-y-auto p-2 space-y-4 text-sm scrollbar-hide">
+        <section class="glass p-6 rounded-[2.5rem] flex flex-col h-[480px]">
+            <div class="text-[9px] system-font text-[#D4AF37]/50 mb-4 px-2 flex justify-between uppercase">
+                <span>Core.Session.Initialize...</span>
+                <span id="usage-counter">Free Trial: 0/3</span>
+            </div>
+            
+            <div id="chat-box" class="flex-1 overflow-y-auto p-3 space-y-6 text-[13px] scrollbar-hide">
                 <div class="flex justify-start">
-                    <p class="bg-white/5 border border-white/10 p-4 rounded-2xl text-gray-300">
-                        System ready. Input text to break the language barrier.
-                    </p>
+                    <div class="bg-white/5 border border-white/10 p-5 rounded-2xl text-gray-400 max-w-[90%] text-[12px] leading-relaxed system-font">
+                        <span class="text-[#D4AF37]">SYSTEM:</span> High-fidelity mode ready. Input source text below for cognitive language processing. Current layer: Neutral Global.
+                    </div>
                 </div>
             </div>
             
-            <div class="mt-4 flex gap-2">
+            <div class="mt-8 flex flex-col gap-4">
                 <input id="user-input" type="text" 
-                       class="flex-1 bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-[#D4AF37]" 
-                       placeholder="Type here...">
+                       class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] transition-all text-[15px]" 
+                       placeholder="Enter text for analysis...">
                 <button onclick="handleChat()" 
-                        class="bg-white text-black px-6 py-4 rounded-xl font-bold text-xs">GO</button>
+                        class="w-full bg-white text-black py-5 rounded-xl font-black text-sm uppercase tracking-[0.3em] active:scale-[0.98] transition-all">Execute</button>
             </div>
         </section>
     </main>
 
-    <footer class="mt-auto py-10 w-full text-center">
-        <div class="flex justify-center gap-6 text-[10px] text-gray-600 uppercase tracking-widest font-medium">
-            <a href="/terms.html" class="hover:text-gray-400">Terms</a>
-            <a href="/privacy.html" class="hover:text-gray-400">Privacy</a>
-            <a href="/support.html" class="hover:text-gray-400">Support</a>
+    <footer class="mt-24 w-full max-w-md px-4 border-t border-white/5 pt-12">
+        <div class="grid grid-cols-3 gap-4 text-[9px] text-gray-600 uppercase tracking-widest font-bold mb-10">
+            <a href="/terms.html" class="hover:text-white transition-colors">Terms of Service</a>
+            <a href="/privacy.html" class="hover:text-white transition-colors text-center">Privacy Policy</a>
+            <a href="/support.html" class="hover:text-white transition-colors text-right">Support Access</a>
+        </div>
+        <div class="text-[8px] text-gray-800 text-justify leading-loose tracking-tighter">
+            NEXTBASE ONE GLOBAL INFRASTRUCTURE: This service is powered by advanced cognitive processing layers. Subscription fees are applied to maintain gateway stability and high-fidelity output accuracy. All rights reserved under the NEXTBASE protocol © 2026.
         </div>
     </footer>
 
     <script>
     async function sendMessage(text) {
         const chatBox = document.getElementById('chat-box');
-        chatBox.innerHTML += `<div class="flex justify-end"><p class="bg-white/10 p-4 rounded-2xl text-white max-w-[85%]">${text}</p></div>`;
+        const counter = document.getElementById('usage-counter');
+        
+        const today = new Date().toLocaleDateString();
+        let stats = JSON.parse(localStorage.getItem('glb_usage') || '{"date":"","count":0}');
+        if (stats.date !== today) stats = {date: today, count: 0};
+
+        if (stats.count >= 3) {
+            chatBox.innerHTML += `<div class="flex justify-start"><p class="bg-[#D4AF37]/5 border border-[#D4AF37]/20 p-5 rounded-2xl text-[#D4AF37] text-[12px] system-font">CRITICAL: TRIAL LIMIT EXCEEDED. <br>Please upgrade to Premium for unlimited gateway access.</p></div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return;
+        }
+
+        chatBox.innerHTML += `<div class="flex justify-end"><p class="bg-white/10 p-5 rounded-2xl text-white max-w-[85%] leading-relaxed">${text}</p></div>`;
 
         try {
             const response = await fetch('https://glb-nexus.tomori-engine.io/v1/webhook/receiver/nori-san-01', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    user_input: text,
-                    mode: 'GLB_GLOBAL',
-                    logic: '150_SYSTEM'
-                })
+                body: JSON.stringify({ user_input: text, mode: 'GLOBAL_SECURE' })
             });
             const data = await response.json();
-            
-            chatBox.innerHTML += `<div class="flex justify-start"><p class="bg-white/5 border border-white/10 p-4 rounded-2xl max-w-[85%] text-[#D4AF37]">${data.output || 'Processing complete.'}</p></div>`;
+            stats.count++;
+            localStorage.setItem('glb_usage', JSON.stringify(stats));
+            counter.innerText = `Free Trial: ${stats.count}/3`;
+
+            chatBox.innerHTML += `<div class="flex justify-start"><p class="bg-white/5 border border-white/10 p-5 rounded-2xl max-w-[85%] text-[#D4AF37] leading-relaxed system-font"><span class="text-white/30 text-[10px]">OUTPUT:</span><br>${data.output || 'Verified.'}</p></div>`;
         } catch (e) {
-            chatBox.innerHTML += `<p class="text-gray-600 text-[10px] text-center italic mt-2">Offline redundancy active.</p>`;
+            chatBox.innerHTML += `<p class="text-gray-800 text-[8px] text-center italic mt-6 system-font uppercase tracking-widest">Gateway handshaking failed. Offline mode active.</p>`;
         }
         chatBox.scrollTop = chatBox.scrollHeight;
     }
@@ -92,7 +130,6 @@
         sendMessage(input.value);
         input.value = '';
     }
-
     document.getElementById('user-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleChat(); });
     </script>
 </body>
