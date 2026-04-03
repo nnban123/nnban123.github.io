@@ -15,16 +15,41 @@
     </style>
 </head>
 <body>
-    <section class="hero">
-        <img src="icon.png" class="logo" onclick="document.getElementById('intro').scrollIntoView({behavior:'smooth'})">
-        <div style="margin-top:20px; letter-spacing:10px; font-weight:900;">READY</div>
-    </section>
-    <section id="intro" style="padding: 100px 20px;">
-        <h2 style="letter-spacing: 5px; margin-bottom: 50px;">Global Language Breaker</h2>
-        <button class="btn-main" onclick="location.href='https://buy.stripe.com/7sY28t7Rje4UgzZ1DNasg0q'">TRAVEL PASS ($24.99)</button>
-        <button class="btn-sub" onclick="location.href='https://buy.stripe.com/bJedRbefH5yogzZfuDasg09'">BASIC PASS ($2.99/mo)</button>
-        <button class="btn-sub" onclick="location.href='https://buy.stripe.com/5kQ14pgnP7Gw1F54PZasg0g'">PREMIUM PASS ($24.99/mo)</button>
-        <footer>PRODUCED BY NORI-SAN / NEXTBASE GLOBAL</footer>
-    </section>
+    <script>
+    // 1. パパの最強知能（Smile Friend）を呼び出す
+    async function sendMessageToSmileFriend(text) {
+        const chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML += `<p class="text-gray-400">You: ${text}</p>`;
+
+        try {
+            // パパのGCPゲートウェイ(nori-san-01)へ直結
+            const response = await fetch('https://glb-nexus.tomori-engine.io/v1/webhook/receiver/nori-san-01', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    user_input: text,
+                    mode: 'GLB_2.99_LIGHT',
+                    logic: '150_SYSTEM_PASS' // 150系辞書ロジックを強制起動
+                })
+            });
+            const data = await response.json();
+            
+            // ステラがSmile Friendの結果を表示
+            chatBox.innerHTML += `<p class="text-blue-300">ステラ: ${data.output || 'パパ、通信は成功。Geminiトモリが動いてるよ！'}</p>`;
+        } catch (e) {
+            chatBox.innerHTML += `<p class="text-red-400 italic text-xs">ステラ: ごめんパパ、今はオフライン(VoidBone)で対応するね。</p>`;
+        }
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // 送信ボタンの動作をこれに差し替える
+    function handleChat() {
+        const input = document.getElementById('user-input');
+        if(!input.value) return;
+        sendMessageToSmileFriend(input.value);
+        input.value = '';
+    }
+</script>
+
 </body>
 </html>
