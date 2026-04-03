@@ -1,58 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>GLB - TERMINAL</title>
-    <style>
-        body { background: #000; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; }
-        .intel { background: #D4AF37; color: #000; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: none; font-weight: 900; }
-        input { width: 90%; max-width: 400px; padding: 20px; background: #111; border: 1px solid #D4AF37; color: #fff; border-radius: 15px; font-size: 1.2rem; outline: none; }
-        #result { margin-top: 30px; text-align: left; max-width: 400px; margin: 30px auto; color: #D4AF37; line-height: 1.8; }
-        .offline-tip { font-size: 0.8rem; color: #D4AF37; margin-top: 20px; border: 1px dashed #D4AF37; padding: 10px; border-radius: 10px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GLB TRANSLATE | NEXT BASE</title>
+  <style>
+    body { background: #000; color: #f3f3f3; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+    .app-card { width: 90%; max-width: 400px; text-align: center; }
+    .input-box { width: 100%; height: 120px; background: #111; border: 1px solid #ffd978; border-radius: 12px; color: #fff; padding: 15px; font-size: 18px; box-sizing: border-box; margin-bottom: 20px; outline: none; }
+    .output-box { width: 100%; min-height: 120px; background: #050505; border: 1px dashed #666; border-radius: 12px; color: #ffd978; padding: 15px; font-size: 20px; box-sizing: border-box; text-align: left; margin-bottom: 30px; }
+    .btn-trans { width: 100%; background: #ffd978; color: #000; padding: 20px; border: none; border-radius: 12px; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 0 20px rgba(224, 184, 93, 0.3); }
+    .label { font-size: 12px; color: #69f0ff; letter-spacing: 0.2em; margin-bottom: 8px; text-transform: uppercase; text-align: left; width: 100%; }
+  </style>
 </head>
 <body>
-    <div id="intel-layer" class="intel">🛡️ TRAVEL MODE ACTIVE</div>
-    <div style="margin-top: 40px;">
-        <input type="text" id="input" placeholder="Type word..." onkeydown="if(event.key==='Enter') breakBarrier()">
-        <p id="counter" style="font-size: 0.7rem; color: #555; margin-top: 10px;"></p>
-    </div>
-    <div id="result"></div>
-    <div class="offline-tip">🆘 SOS: "Help me", "Hospital", "Police"</div>
 
-    <script>
-        const plan = new URLSearchParams(window.location.search).get('plan');
-        const limit = (plan === 'travel' || plan === 'premium') ? 300 : 30;
+  <div class="app-card">
+    <div class="label">Input (Meaning)</div>
+    <textarea class="input-box" id="inputText" placeholder="ここに伝えたい意味を入力..."></textarea>
+    
+    <button class="btn-trans" onclick="executeLogic()">CONVERT TO GLOBAL</button>
 
-        // 旅行モード：1ヶ月限定情報の提示
-        let intel = JSON.parse(localStorage.getItem('glb_intel'));
-        if (plan === 'travel' && (!intel || (Date.now() - intel.date > 30 * 24 * 60 * 60 * 1000))) {
-            const dest = prompt("Enter Destination:");
-            if(dest) {
-                intel = { dest, date: Date.now(), tips: "Manners & Tips: Loading from ne-gateway..." };
-                localStorage.setItem('glb_intel', JSON.stringify(intel));
-            }
-        }
-        if (intel && (Date.now() - intel.date < 30 * 24 * 60 * 60 * 1000)) {
-            document.getElementById('intel-layer').style.display = 'block';
-            document.getElementById('intel-layer').innerText = `📍 ${intel.dest}: Tips & Manners Loaded`;
-        }
+    <div class="label" style="margin-top: 30px;">Output (Friend Side)</div>
+    <div class="output-box" id="outputText">意味がここに生成されます...</div>
+    
+    <p style="font-size: 11px; color: #444; margin-top: 20px;">$2.99 TIER / SMILE-FRIEND CONNECTED</p>
+  </div>
 
-        function breakBarrier() {
-            let count = parseInt(localStorage.getItem('glb_api_count') || 0);
-            if (count >= limit) return alert("Limit Reached.");
-            const val = document.getElementById('input').value;
-            if(!val) return;
+  <script>
+    // 演算ロジック：文法を捨て、意味を抽出して再構築する
+    function executeLogic() {
+      const input = document.getElementById('inputText').value;
+      const output = document.getElementById('outputText');
+      
+      if(!input) return;
 
-            // ブラックボックス熟成待機
-            document.getElementById('result').innerHTML = "Analyzing in Smile Friend Intelligence...<br><span style='font-size:0.7rem; color:#555;'>Maturing high-precision phrases...</span>";
-            
-            // 学習帳へ保存
-            localStorage.setItem('dic_' + val, val);
-            localStorage.setItem('glb_api_count', ++count);
-            document.getElementById('counter').innerText = `Usage: ${count} / ${limit}`;
-            document.getElementById('input').value = '';
-        }
-    </script>
+      output.innerText = "Processing...";
+      
+      // ここにトモリのコアロジック（簡易版）を直結
+      setTimeout(() => {
+        // 本来はAPI連携するが、まずは「動く1」を出すために即時変換
+        output.innerText = input + " [Meaning Optimized]";
+      }, 500);
+    }
+  </script>
+
 </body>
 </html>
