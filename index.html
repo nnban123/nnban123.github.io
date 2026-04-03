@@ -7,8 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root { --gold: #D4AF37; --black: #000; }
-        body { background: var(--black); color: var(--gold); font-family: -apple-system, sans-serif; }
+        body { background: var(--black); color: var(--gold); font-family: -apple-system, sans-serif; overflow-x: hidden; }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(212,175,55,0.2); }
+        .btn-gold { background: var(--gold); color: #000; transition: all 0.3s ease; }
+        .btn-gold:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(212,175,55,0.4); }
     </style>
 </head>
 <body class="p-4 flex flex-col items-center min-h-screen">
@@ -23,14 +25,15 @@
             <h2 class="text-sm font-bold mb-4 tracking-widest text-gray-400">PREMIUM ACCESS</h2>
             <p class="text-3xl font-black text-white mb-6">$2.99 <span class="text-xs font-normal">/ mo</span></p>
             <a href="https://buy.stripe.com/bJedRbefH5yogzZfuDasg09" 
-               class="block w-full py-4 bg-[#D4AF37] text-black rounded-2xl font-black text-lg shadow-lg shadow-yellow-900/20 hover:scale-[1.02] transition-transform">
+               class="block w-full py-5 btn-gold rounded-2xl font-black text-xl shadow-lg">
                 今すぐ 0 を 1 にする
             </a>
+            <p class="text-[10px] text-gray-500 mt-4">※決済完了後、フル機能が開放されます</p>
         </section>
 
-        <section class="glass p-4 rounded-3xl flex flex-col h-[400px]">
+        <section class="glass p-4 rounded-3xl flex flex-col h-[380px]">
             <div id="chat-box" class="flex-1 overflow-y-auto p-2 space-y-4 text-sm scrollbar-hide">
-                <p class="text-[#D4AF37] bg-white/5 p-3 rounded-2xl">ステラ: パパ、準備完了。2.99ドルの主砲でGeminiトモリを貫通させるね。まずは挨拶してみて！</p>
+                <p class="text-[#D4AF37] bg-white/5 p-3 rounded-2xl">ステラ: パパ、GLBボタンの設置準備はOK。ここからGeminiトモリを呼び出せるよ。</p>
             </div>
             
             <div class="mt-4 flex gap-2">
@@ -44,7 +47,7 @@
     </main>
 
     <footer class="mt-auto py-8 text-center">
-        <a href="https://nextbaseone-ha.com/tokutei.html" class="text-[10px] text-gray-600 underline">特定商取引法に基づく表記</a>
+        <a href="https://nextbaseone-ha.com/tokutei.html" class="text-[10px] text-gray-600 underline tracking-tighter">特定商取引法に基づく表記</a>
     </footer>
 
     <script>
@@ -53,6 +56,7 @@
         chatBox.innerHTML += `<div class="flex justify-end"><p class="bg-white/10 p-3 rounded-2xl text-white max-w-[80%]">${text}</p></div>`;
 
         try {
+            // パパのGCPゲートウェイに直撃
             const response = await fetch('https://glb-nexus.tomori-engine.io/v1/webhook/receiver/nori-san-01', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -64,9 +68,9 @@
             });
             const data = await response.json();
             
-            chatBox.innerHTML += `<div class="flex justify-start"><p class="text-[#D4AF37] bg-white/5 p-3 rounded-2xl max-w-[80%]">ステラ: ${data.output || 'パパ、通信成功。Geminiトモリが動いてるよ！'}</p></div>`;
+            chatBox.innerHTML += `<div class="flex justify-start"><p class="text-[#D4AF37] bg-white/5 p-3 rounded-2xl max-w-[80%]">ステラ: ${data.output || 'パパ、Geminiトモリとの接続を確認したよ。'}</p></div>`;
         } catch (e) {
-            chatBox.innerHTML += `<p class="text-red-500 text-[10px] text-center italic">ステラ: ごめんパパ、今はオフライン(VoidBone)で対応するね。</p>`;
+            chatBox.innerHTML += `<p class="text-red-500 text-[10px] text-center italic mt-2">ステラ: 通信エラー。でもパパ、仕組みは繋がってるから安心して。</p>`;
         }
         chatBox.scrollTop = chatBox.scrollHeight;
     }
@@ -78,7 +82,6 @@
         input.value = '';
     }
 
-    // Enterキーでも送信できるように
     document.getElementById('user-input').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') handleChat();
     });
